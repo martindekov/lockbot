@@ -1,0 +1,17 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  lockbot:
+    lang: python3-flask-debian
+    handler: ./lockbot
+    image: martindekov/lockbot:latest
+    environment:
+      github_username: martindekov
+      github_repository: push2
+    secrets:
+      - auth-token
+    annotations:
+      topic: cron-function
+      schedule: "0 0 * * *"
