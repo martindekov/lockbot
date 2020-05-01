@@ -27,6 +27,7 @@ def get_authorization_header():
 def handle(req):
     username = os.getenv("github_username")
     repo = os.getenv("github_repository")
+    days_before_outdated = int(os.getenv("days_before_outdated"))
     r = requests.get(f"https://api.github.com/repos/{username}/{repo}/issues")
     issues = r.json()
 
@@ -34,7 +35,7 @@ def handle(req):
     for issue in issues:
         if not issue.get('pull_request'):
             diff = get_difference_in_days(issue.get('created_at'))
-            if diff.days > 100 and not issue.get("locked"):
+            if diff.days > days_before_outdated and not issue.get("locked"):
                 issue_numbers.append(int(issue.get('number')))
 
     locked_issues = ""
