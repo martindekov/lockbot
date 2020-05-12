@@ -6,13 +6,15 @@ functions:
   lockbot:
     lang: python3-flask-debian
     handler: ./lockbot
-    image: martindekov/lockbot:latest
+    image: martindekov/lockbot:0.0.1
     environment:
-      github_username: martindekov
       github_repository: push2
-      days_before_outdated: 90
+      inactive_days: 90
+      exec_timeout: 30s
+      read_timeout: 30s
+      write_timeout: 30s
     secrets:
       - auth-token
     annotations:
       topic: cron-function
-      schedule: "0 0 * * *"
+      schedule: "*/1 * * * *"
